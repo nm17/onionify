@@ -1,5 +1,5 @@
 # onionify
-Create onion services and more in one CLI command
+Create and manage onion services and more in one CLI command
 
 ## Example
 Create a onion service for some port on your system.
