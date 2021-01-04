@@ -4,6 +4,7 @@ from pathlib import Path
 from nacl.public import PrivateKey
 from typer import Typer, Option
 import base64
+from common import torrc_path_help, site_dir_help, add_site_dir_help
 
 app = Typer()
 
@@ -38,11 +39,11 @@ def get_torrc():
 )
 def add(
     name: str,
-    torrc_path: str = Option(None, "-c", "--torrc"),
-    site_dir: str = Option(None, "-d", "--site-dir"),
-    host: str = "127.0.0.1",
-    real_port: int = 80,
-    tor_port: int = 80,
+    torrc_path: str = Option(None, "-c", "--torrc", help=torrc_path_help),
+    site_dir: str = Option(None, "-d", "--site-dir", help=add_site_dir_help),
+    host: str = Option("127.0.0.1", "--host", help="Address that should tor access to get your application. "),
+    real_port: int = Option(80, "--host", help="Port your application is running on the host."),
+    tor_port: int = Option(80, "--host", help="Port your application should be accessible through Tor."),
 ):
     site_dir = site_dir or get_site_dir()
     torrc_path = torrc_path or get_torrc()
@@ -90,7 +91,7 @@ def generate_auth_pair(
     ),
     add_key: bool = Option(False, "-a", "--add-key", help="Adds this key to your list of authorized clients."),
 
-    site_dir: str = Option(None, "-d", "--site-dir"),
+    site_dir: str = Option(None, "-d", "--site-dir", help=site_dir_help),
 ):
     site_dir = site_dir or get_site_dir()
 
@@ -134,7 +135,7 @@ def generate_auth_pair(
 @app.command(
     help="Removes a site from the config. Does not delete the site folder for safety reasons."
 )
-def remove(name: str, torrc_path: str = Option(None, "-c", "--torrc")):
+def remove(name: str, torrc_path: str = Option(None, "-c", "--torrc", help=torrc_path_help)):
     torrc_path = torrc_path or get_torrc()
 
     config = torrc_path.read_bytes()
